@@ -1,0 +1,8 @@
+{
+    "url": "vercelURL",
+    "endpoints": {
+        "register": "/register",
+        "login": "/login",
+        "workouts": "/workouts"
+    }
+}
