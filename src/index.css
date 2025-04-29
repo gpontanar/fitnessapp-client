@@ -3,11 +3,121 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
+ -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Navbar background and text color */
+.navbar-custom {
+  background-color: navy;
+}
+
+.navbar-custom .text-white {
+  color: white !important;
+  font-size: 1.2rem; 
+  font-weight: bold; 
+}
+
+.nav-link-custom:hover {
+  color: lightgray !important; 
+}
+
+
+/* Center the Navs link */
+.navbar-custom .mx-auto {
+  display: flex;
+  justify-content: center;
+}
+
+/* Buttons styling */
+.btn-custom {
+  background-color: navy;
+  color: white;
+  border: none;
+  width: 200px;
+  text-align: center;
+}
+
+.btn-custom:hover {
+  background-color: rgb(214, 7, 86) !important;
+  color: white;
+}
+
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+  .navbar-custom .mx-auto {
+    flex-direction: column; 
+    align-items: center; 
+  }
+
+  .btn-custom {
+    width: 100%; 
+    margin-bottom: 10px; 
+  }
+}
+
+/* Carousel container styling */
+.carousel-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  border: 2px solid navy;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Carousel image styling */
+.carousel-image {
+  height: 700px;
+  object-fit: cover;
+}
+
+/* Carousel caption styling */
+.carousel-caption h3 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.carousel-caption p {
+  font-size: 1.2rem;
+  color: lightgray;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Update Button */
+.btn-update {
+  background-color: blue;
+  color: white;
+  border: none;
+  margin-right: 5px;
+}
+
+.btn-update:hover {
+  background-color: darkblue;
+}
+
+/* Delete Button */
+.btn-delete {
+  background-color: red;
+  color: white;
+  border: none;
+  margin-right: 5px;
+}
+
+.btn-delete:hover {
+  background-color: darkred;
+}
+
+/* Complete Button */
+.btn-complete {
+  background-color: green;
+  color: white;
+  border: none;
+}
+
+.btn-complete:hover {
+  background-color: darkgreen;
 }
