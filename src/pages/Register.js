@@ -12,7 +12,7 @@ export default function Register() {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        fetch('https://fitnessapp-api-ln8u.onrender.com/users/register', {
+        fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
@@ -25,6 +25,15 @@ export default function Register() {
                 } else {
                     notyf.error(data.error || 'Registration Failed');
                 }
+            })
+            .catch((error) => {
+                console.error('Error during registration:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred. Please try again later.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
             });
     };
 

@@ -17,18 +17,15 @@ export const UserProvider = ({ children }) => {
       }
   }, []);
 
-    const loginUser = (userData) => {
-        localStorage.setItem('user', JSON.stringify(userData)); // Save user data to localStorage
-        setUser(userData); // Update user state
-    };
+  const loginUser = (userData) => {
+    localStorage.setItem('user', JSON.stringify(userData)); // Save user data to localStorage
+    setUser(userData); // Update user state
+};
+const logoutUser = () => {
+    localStorage.clear(); // Clear all localStorage data
+    setUser({ id: null, token: null }); // Reset user state
+};
 
-    const logoutUser = () => {
-        localStorage.clear(); // Clear all localStorage data
-        setUser({
-            id: null,
-            token: null,
-        });
-    };
 
     return (
         <UserContext.Provider value={{ user, setUser, loginUser, logoutUser, loading }}>

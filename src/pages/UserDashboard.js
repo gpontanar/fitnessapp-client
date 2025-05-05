@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UserContext from '../UserContext';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 export default function UserDashboard() {
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
     const [workouts, setWorkouts] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [editWorkout, setEditWorkout] = useState(null);
@@ -11,20 +14,32 @@ export default function UserDashboard() {
 
     // Fetch workouts for the logged-in user
     useEffect(() => {
-        fetch('https://fitnessapp-api-ln8u.onrender.com/workouts/getMyWorkouts', {
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found');
+            navigate('/login'); // Redirect to login page
+            return;
+        }
+
+        fetch(`${process.env.REACT_APP_API_URL}/workouts/getMyWorkouts`, {
+            headers: { Authorization: `Bearer ${token}` },
         })
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Failed to fetch workouts');
+                }
+                return res.json();
+            })
             .then((data) => setWorkouts(data.workouts || []))
             .catch((error) => console.error('Error fetching workouts:', error));
-    }, []);
+    }, [navigate]);
 
     // Handle adding or updating a workout
     const handleSaveWorkout = (e) => {
         e.preventDefault();
         const url = editWorkout
-            ? `https://fitnessapp-api-ln8u.onrender.com/workouts/updateWorkout/${editWorkout._id}`
-            : 'https://fitnessapp-api-ln8u.onrender.com/workouts/addWorkout';
+            ? `${process.env.REACT_APP_API_URL}/workouts/updateWorkout/${editWorkout._id}`
+            : `${process.env.REACT_APP_API_URL}/workouts/addWorkout`;
         const method = editWorkout ? 'PATCH' : 'POST';
 
         fetch(url, {
@@ -38,46 +53,80 @@ export default function UserDashboard() {
             .then((res) => res.json())
             .then((data) => {
                 if (editWorkout) {
+                    // Update the workout in the state
                     setWorkouts(
                         workouts.map((workout) =>
                             workout._id === data._id ? data : workout
                         )
                     );
                 } else {
+                    // Add the new workout to the state
                     setWorkouts([...workouts, data]);
                 }
                 setShowModal(false);
                 setNewWorkout({ name: '', duration: '', status: 'Pending' });
                 setEditWorkout(null);
+
+                // Show success Swal and refresh the page
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Workout Saved Successfully!',
+                    text: 'Your workout has been updated.',
+                    confirmButtonText: 'OK',
+                }).then(() => {
+                    window.location.reload(); // Refresh the page
+                });
             })
             .catch((error) => console.error('Error saving workout:', error));
     };
 
     // Handle deleting a workout
     const handleDeleteWorkout = (id) => {
-        fetch(`https://fitnessapp-api-ln8u.onrender.com/workouts/deleteWorkout/${id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/workouts/deleteWorkout/${id}`, {
             method: 'DELETE',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
             .then(() => {
+                // Remove the workout from the state
                 setWorkouts(workouts.filter((workout) => workout._id !== id));
+
+                // Show success Swal and refresh the page
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Workout Deleted Successfully!',
+                    text: 'The workout has been removed.',
+                    confirmButtonText: 'OK',
+                }).then(() => {
+                    window.location.reload(); // Refresh the page
+                });
             })
             .catch((error) => console.error('Error deleting workout:', error));
     };
 
     // Handle marking a workout as complete
     const handleCompleteWorkout = (id) => {
-        fetch(`https://fitnessapp-api-ln8u.onrender.com/workouts/completeWorkoutStatus/${id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/workouts/completeWorkoutStatus/${id}`, {
             method: 'PATCH',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         })
             .then((res) => res.json())
             .then((updatedWorkout) => {
+                // Update the workout status in the state
                 setWorkouts(
                     workouts.map((workout) =>
                         workout._id === updatedWorkout._id ? updatedWorkout : workout
                     )
                 );
+
+                // Show success Swal and refresh the page
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Workout Marked as Complete!',
+                    text: 'The workout status has been updated.',
+                    confirmButtonText: 'OK',
+                }).then(() => {
+                    window.location.reload(); // Refresh the page
+                });
             })
             .catch((error) => console.error('Error updating workout status:', error));
     };

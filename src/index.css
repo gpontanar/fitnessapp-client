@@ -31,7 +31,7 @@ body {
 
 /* Buttons styling */
 .btn-custom {
-  background-color: navy;
+  background-color: rgb(10, 98, 212);
   color: white;
   border: none;
   width: 200px;
@@ -87,6 +87,21 @@ body {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
 
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .carousel-container {
+    max-width: 90%; 
+  }
+
+  .carousel-caption h3 {
+    font-size: 1.5rem; 
+  }
+
+  .carousel-caption p {
+    font-size: 1rem; 
+  }
+}
+
 /* Update Button */
 .btn-update {
   background-color: blue;
@@ -120,4 +135,13 @@ body {
 
 .btn-complete:hover {
   background-color: darkgreen;
+}
+
+/* Hamburger icon color */
+.navbar-toggler {
+  border-color: white; /* Change the border color of the toggler */
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); /* Change the icon color to white */
 }
