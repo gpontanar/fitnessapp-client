@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Login from '../pages/Login';
-import Register from '../pages/Register'; // Import the Register component
+import Register from '../pages/Register';
 
 export default function AppNavbar({ user, logoutUser }) {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        logoutUser(); // Clear user data
-        navigate('/'); // Redirect to home page
+        logoutUser();
+        navigate('/');
     };
 
-    console.log('User in AppNavbar:', user); // Debug log
+    const handleRegisterSuccess = () => {
+        setShowRegisterModal(false); // Close the register modal
+        setShowLoginModal(true); // Open the login modal
+    };
 
     return (
         <Navbar expand="lg" className="navbar-custom px-4">
@@ -29,34 +31,28 @@ export default function AppNavbar({ user, logoutUser }) {
             </Navbar.Brand>
             <Navbar.Toggle
                 aria-controls="basic-navbar-nav"
-                onClick={() => setMenuOpen(!menuOpen)}
+                onClick={() => setShowLoginModal(!showLoginModal)}
             />
-            <Navbar.Collapse id="basic-navbar-nav" className={menuOpen ? 'show' : ''}>
+            <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mx-auto">
-                    {!user?.id && ( // Show Home button only if the user is not logged in
+                    {!user?.id && (
                         <Nav.Link as={Link} to="/" className="text-white nav-link-custom">
                             Home
                         </Nav.Link>
                     )}
                 </Nav>
                 <Nav>
-                    {user?.id ? ( // Check if the user is logged in
+                    {user?.id ? (
                         <>
                             <Button
                                 className="btn-custom mx-2"
-                                onClick={() => {
-                                    navigate('/user-dashboard'); // Redirect to UserDashboard
-                                    setMenuOpen(false);
-                                }}
+                                onClick={() => navigate('/user-dashboard')}
                             >
                                 Dashboard
                             </Button>
                             <Button
                                 className="btn-custom"
-                                onClick={() => {
-                                    handleLogout();
-                                    setMenuOpen(false);
-                                }}
+                                onClick={handleLogout}
                             >
                                 Logout
                             </Button>
@@ -65,19 +61,13 @@ export default function AppNavbar({ user, logoutUser }) {
                         <>
                             <Button
                                 className="btn-custom mx-2"
-                                onClick={() => {
-                                    setShowLoginModal(true);
-                                    setMenuOpen(false);
-                                }}
+                                onClick={() => setShowLoginModal(true)}
                             >
                                 Login
                             </Button>
                             <Button
                                 className="btn-custom mx-2"
-                                onClick={() => {
-                                    setShowRegisterModal(true);
-                                    setMenuOpen(false);
-                                }}
+                                onClick={() => setShowRegisterModal(true)}
                             >
                                 Register
                             </Button>
@@ -97,9 +87,7 @@ export default function AppNavbar({ user, logoutUser }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Login
-                        onLoginSuccess={() => {
-                            setShowLoginModal(false); // Close the modal on successful login
-                        }}
+                        onLoginSuccess={() => setShowLoginModal(false)}
                     />
                 </Modal.Body>
             </Modal>
@@ -114,7 +102,7 @@ export default function AppNavbar({ user, logoutUser }) {
                     <Modal.Title id="register-modal">Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Register />
+                    <Register onRegisterSuccess={handleRegisterSuccess} />
                 </Modal.Body>
             </Modal>
         </Navbar>

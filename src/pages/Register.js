@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Notyf } from 'notyf';
-import { Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-export default function Register() {
-    const notyf = new Notyf();
+export default function Register({ onRegisterSuccess }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isRegistered, setIsRegistered] = useState(false);
 
     const handleRegister = (e) => {
         e.preventDefault();
@@ -20,10 +16,20 @@ export default function Register() {
             .then((res) => res.json())
             .then((data) => {
                 if (data.message === 'Registered Successfully') {
-                    notyf.success('Registration Successful!');
-                    setIsRegistered(true);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful!',
+                        text: 'Your account has been created.',
+                        confirmButtonText: 'Login to your account',
+                    }).then(() => {
+                        onRegisterSuccess(); // Trigger the callback to close the register modal and open the login modal
+                    });
                 } else {
-                    notyf.error(data.error || 'Registration Failed');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: data.error || 'Please try again.',
+                    });
                 }
             })
             .catch((error) => {
@@ -37,11 +43,9 @@ export default function Register() {
             });
     };
 
-    return isRegistered ? (
-        <Navigate to="/login" />
-    ) : (
+    return (
         <Form onSubmit={handleRegister}>
-            <h5 className="my-2 text-center"></h5>
+            <h5 className="my-2 text-center">Register</h5>
             <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
