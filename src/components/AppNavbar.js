@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Navbar, Nav, Button, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import Login from '../pages/Login';
+import Register from '../pages/Register'; // Import the Register component
 
 export default function AppNavbar({ user, logoutUser }) {
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -104,12 +105,16 @@ export default function AppNavbar({ user, logoutUser }) {
             </Modal>
 
             {/* Register Modal */}
-            <Modal show={showRegisterModal} onHide={() => setShowRegisterModal(false)}>
+            <Modal
+                show={showRegisterModal}
+                onHide={() => setShowRegisterModal(false)}
+                aria-labelledby="register-modal"
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title>Register</Modal.Title>
+                    <Modal.Title id="register-modal">Register</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {/* Registration form */}
+                    <Register />
                 </Modal.Body>
             </Modal>
         </Navbar>

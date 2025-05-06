@@ -41,7 +41,7 @@ export default function Register() {
         <Navigate to="/login" />
     ) : (
         <Form onSubmit={handleRegister}>
-            <h1 className="my-5 text-center">Register</h1>
+            <h5 className="my-2 text-center"></h5>
             <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -62,7 +62,7 @@ export default function Register() {
                     required
                 />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button className="my-3" variant="primary" type="submit">
                 Register
             </Button>
         </Form>
